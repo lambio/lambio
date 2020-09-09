@@ -1,8 +1,6 @@
 import React from 'react'
 import { Card, Icon, Image } from 'semantic-ui-react'
 
-
-
 const AssetCard = ({ asset }) => {
   return (
     <Card>
@@ -17,9 +15,7 @@ const AssetCard = ({ asset }) => {
         </Card.Meta>
       </Card.Content>
       <Card.Content extra>
-        <a>
-          <Icon name='user' />
-        </a>
+        <Icon name='user' />
       </Card.Content>
     </Card>
   )
