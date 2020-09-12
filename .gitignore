@@ -1,7 +1,15 @@
+# Infra files
+infra/keys/web/authorized_worker_keys
+infra/keys/web/session_signing_key
+infra/keys/web/tsa_host_key
+infra/keys/web/tsa_host_key.pub
+infra/keys/web/authorized_worker_keys
+infra/keys/worker/worker_key
+infra/keys/worker/worker_key.pub
+infra/keys/worker/tsa_host_key.pub
 
 # Logs
 logs
-infra/keys
 *.log
 npm-debug.log*
 yarn-debug.log*
