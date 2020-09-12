@@ -1,0 +1,27 @@
+resources:
+  - name: every-3h
+    type: time
+    icon: clock-outline
+    source:
+      interval: 3h
+
+jobs:
+  - name: trivy
+    public: true
+    plan:
+      - get: every-3h
+        trigger: true
+      - task: trivy-scan
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: aquasec/trivy, tag: "latest" }
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                echo "wasap"
+                echo "Hello"
+                trivy python:3.4-alpine
