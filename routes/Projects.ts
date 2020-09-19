@@ -22,6 +22,12 @@ router.get('/:id', async function(req, res, next) {
     res.send(project);
 });
 
+router.delete('/:id', async function(req, res, next) {
+    let project = await Project.findOne({where: {id: req.params.id}})
+    project.remove()
+    res.send();
+});
+
 router.post('/:id/assets', async function(req, res, next) {
     let project = await Project.findOne({where: {id: req.params.id}})
     let asset = new Asset()

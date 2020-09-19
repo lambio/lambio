@@ -1,15 +1,20 @@
-require('dotenv').config()
-const fs = require('fs');
-const fetch = require('node-fetch');
+import fs from 'fs'
+import fetch from 'node-fetch'
 
-class ConcourseClient {
+export class ConcourseClient {
+    token: string
+    api: string
 
     constructor() {
       this.token = process.env.CONCOURSE_TOKEN
       this.api = process.env.CONCOURSE_API
     }
-    async sendPipeline(asset, project, pipelineVersion) {
-        // Create pipeline        
+
+    createURL(asset) {
+        return `${this.api}/teams/${asset.project.teamName}/pipelines/${asset.project.name}-${asset.name}`
+    }
+
+    async sendPipeline(asset, pipelineVersion = null) {
         let headers = { 
             'Authorization': `Bearer ${this.token}`,
             "Content-type": "application/x-yaml",
@@ -18,34 +23,37 @@ class ConcourseClient {
             headers["X-Concourse-Config-Version"] = pipelineVersion
         }
         let pipelineTemplate = fs.readFileSync(`infra/${asset.type}/${asset.type}-pipeline.yml`)
-        await fetch(`${this.api}/teams/${project.teamName}/pipelines/${asset.name}/config`, {
+        return await fetch(this.createURL(asset) + '/config', {
             headers,
             method: 'PUT',
             body: pipelineTemplate
         })
     }
-    async createPipeline(asset, project) {
+    async createPipeline(asset) {
         // Create pipeline
-        this.sendPipeline(asset, project)
-        // Unpuase pipeline 
-        await fetch(`${this.api}/teams/${project.teamName}/pipelines/${asset.name}/unpause`, {
+        await this.sendPipeline(asset)
+        // Unpuase pipeline
+        await fetch(this.createURL(asset) + '/unpause', {
             headers: {'Authorization': `Bearer ${this.token}`},
             method: 'PUT',            
         })
     }
 
-    async updatePipeline(asset, project) {
+    async updatePipeline(asset) {
         // Get current pipeline version
-        let response = await fetch(`${this.api}/teams/${project.teamName}/pipelines/${asset.name}/config`, {
+        let response = await fetch(this.createURL(asset) + '/config', {
             headers: { 'Authorization': `Bearer ${this.token}`}
         })
         let pipelineVersion = response.headers.get('X-Concourse-Config-Version')      
         // Update pipeline
-        this.sendPipeline(asset, project, pipelineVersion)
+        this.sendPipeline(asset, pipelineVersion)
+    }
+
+    async removePipeline(asset) {
+        let response = await fetch(this.createURL(asset), {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${this.token}`}
+        })
+        console.log(response)
     }
 }
-
-// Test
-con = new ConcourseClient()
-con.updatePipeline({name: 'trivy-scanner', type: 'trivy'}, {teamName: 'main'})
-module.exports = ConcourseClient
