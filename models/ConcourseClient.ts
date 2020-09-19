@@ -54,6 +54,5 @@ export class ConcourseClient {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${this.token}`}
         })
-        console.log(response)
     }
 }
