@@ -10,6 +10,7 @@ import "reflect-metadata";
 import 'express-async-errors';
 // Import routes
 import {router as projectsRouter} from './routes/Projects'
+import {router as assetsRouter} from './routes/Assets'
 
 dotenv.config()
 createConnection().then(async connection => {
@@ -30,6 +31,7 @@ createConnection().then(async connection => {
   })
 
   app.use('/projects', projectsRouter);
+  app.use('/assets', assetsRouter);
 
   // catch 404 and forward to error handler
   app.use(function(req, res, next) {
