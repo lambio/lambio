@@ -22,6 +22,4 @@ jobs:
             args:
               - -c
               - |
-                echo "wasap"
-                echo "Hello"
-                trivy python:3.4-alpine
+                trivy ((docker-image))
