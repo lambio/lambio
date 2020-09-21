@@ -22,4 +22,4 @@ jobs:
             args:
               - -c
               - |
-                trivy ((docker-image))
+                trivy ((docker_image))

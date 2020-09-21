@@ -32,8 +32,8 @@ router.post('/:id/assets', async function (req, res) {
     let project = await Project.findOne({ where: { id: req.params.id } })
     let asset = new Asset()
     asset.name = req.body.name,
-        asset.type = req.body.type,
-        asset.info = req.body.info
+    asset.type = req.body.type,
+    asset.info = req.body.info
     asset.project = project
     asset.save()
     res.send(project)

@@ -19,7 +19,7 @@ export class Pipeline extends ConcourseModel {
     }
 
     evaluateYaml(asset) {
-        let pipelineTemplate = fs.readFileSync(`infra/${asset.type}/${asset.type}-pipeline.yml`)
+        let pipelineTemplate = fs.readFileSync(`scanners/${asset.type}/template.yml`)
         let pipelineText = pipelineTemplate.toString()
         _.templateSettings.interpolate = /\(\(([\s\S]+?)\)\)/g; // Pattern like ((var))
         let compiled = _.template(pipelineText);
