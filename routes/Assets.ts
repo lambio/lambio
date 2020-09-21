@@ -9,7 +9,7 @@ router.get('/:id', async function(req, res, next) {
 });
 
 router.delete('/:id', async function(req, res, next) {
-    let asset = await Asset.findOne({where: {id: req.params.id}, relations: ["project"]})
+    let asset = await Asset.findOne({where: {id: req.params.id}})
     asset.remove()
     res.send();
 });
