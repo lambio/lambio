@@ -8,6 +8,9 @@ infra/keys/worker/worker_key
 infra/keys/worker/worker_key.pub
 infra/keys/worker/tsa_host_key.pub
 
+build
+**/.vscode/
+
 # Logs
 logs
 *.log

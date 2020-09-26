@@ -1,0 +1,48 @@
+resources:
+  - name: every-3h
+    type: time
+    icon: clock-outline
+    source:
+      interval: 3h
+
+jobs:
+- name: integration
+  plan:
+  - get: every-3h
+    params:
+      depth: 1
+    trigger: true
+  - task: integration-tests
+    privileged: true
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image  
+        source:
+          repository: karlkfi/concourse-dcind
+      caches:
+      - path: images
+      outputs:
+      - name: artifacts
+
+      run:
+        path: entrypoint.sh
+        args:
+        - bash
+        - -ceux
+        - |          
+          if [ -e images/zap ]
+          then
+            docker load -i images/zap
+          else
+            docker pull owasp/zap2docker-weekly
+            docker save owasp/zap2docker-weekly -o images/zap
+          fi
+
+          chmod 777 artifacts
+          docker run -it -v $(pwd)/artifacts:/zap/wrk:rw owasp/zap2docker-weekly sh -c "\
+             zap-baseline.py -t ((url)) -J results.json || true \
+          "
+          ls -la
+          ls -la artifacts
+          cat artifacts/results.json

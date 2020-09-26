@@ -19,7 +19,7 @@ services:
     ports: ["8080:8080"]
     volumes: ["./infra/keys/web:/concourse-keys"]
     environment:
-      CONCOURSE_POSTGRES_HOST: ${DATABASE_HOST}
+      CONCOURSE_POSTGRES_HOST: db
       CONCOURSE_POSTGRES_USER: ${DATABASE_USER}
       CONCOURSE_POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       CONCOURSE_POSTGRES_DATABASE: ${DATABASE}
